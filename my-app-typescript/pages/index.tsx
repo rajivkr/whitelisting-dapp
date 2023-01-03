@@ -114,21 +114,21 @@ export default function Home() {
       // We will need the signer later to get the user's address
       // Even though it is a read transaction, since Signers are just special kinds of Providers,
       // We can use it in it's place
-      const signer = await getProviderOrSigner(true);
-      if (signer instanceof providers.JsonRpcSigner) {
-        const whitelistContract = new Contract(
-          WHITELIST_CONTRACT_ADDRESS,
-          abi,
-          signer
-        );
-        // Get the address associated to the signer which is connected to  MetaMask
-        const address = await signer.getAddress();
-        // call the whitelistedAddresses from the contract
-        const _joinedWhitelist = await whitelistContract.whitelistedAddresses(
-          address
-        );
-        setJoinedWhitelist(_joinedWhitelist);
-      }
+      const signer = (await getProviderOrSigner(
+        true
+      )) as providers.JsonRpcSigner;
+      const whitelistContract = new Contract(
+        WHITELIST_CONTRACT_ADDRESS,
+        abi,
+        signer
+      );
+      // Get the address associated to the signer which is connected to  MetaMask
+      const address = await signer.getAddress();
+      // call the whitelistedAddresses from the contract
+      const _joinedWhitelist = await whitelistContract.whitelistedAddresses(
+        address
+      );
+      setJoinedWhitelist(_joinedWhitelist);
     } catch (err) {
       console.error(err);
     }
